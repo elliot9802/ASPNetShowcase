@@ -1,0 +1,73 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Razor project";
+}
+
+<div class="container my-4">
+    <header class="text-center mb-5">
+        <h1>GoodFriends Razor Demo</h1>
+        <p class="lead">Razor Project with GoodFriends Database</p>
+    </header>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-5">
+        <div class="p-2">
+            <div class="card h-100">
+                <div class="card-body themed-grid-col d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title">Friends List</h5>
+                        <p class="card-text">Manage friends: edit, delete, view details.</p>
+                    </div>
+                    <a href="/Friends/ViewFriends" class="btn btn-outline-primary mt-3">View Friends</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-2">
+            <div class="card h-100">
+                <div class="card-body themed-grid-col d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title">List of Friends with Address</h5>
+                        <p class="card-text">View all friends and their address</p>
+                    </div>
+                    <a href="/Friends/ListFriends" class="btn btn-outline-primary mt-3">View Friends</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-2">
+            <div class="card h-100">
+                <div class="card-body themed-grid-col d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title">Country Insights</h5>
+                        <p class="card-text">Detailed view of countries and their cities.</p>
+                    </div>
+                    <a href="/Friends/OverviewByCountry" class="btn btn-outline-primary mt-3">Country Details</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-2">
+            <div class="card h-100">
+                <div class="card-body themed-grid-col d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title">Countrywise Overview</h5>
+                        <p class="card-text">View friends and pets by country and city.</p>
+                    </div>
+                    <a href="/Friends/OverviewFriendPets" class="btn btn-outline-primary mt-3">View Overview</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-2">
+            <div class="card h-100">
+                <div class="card-body themed-grid-col d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="card-title">Seed Database</h5>
+                        <p class="card-text">Add random data to the database.</p>
+                    </div>
+                    <a href="/Seed" class="btn btn-outline-primary mt-3">Seed Data</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

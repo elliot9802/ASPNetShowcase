@@ -1,0 +1,223 @@
+﻿@using Models
+@model vwmAddEditFriend
+@{
+    ViewData["Title"] = "Edit/Add to Friend";
+}
+
+<div class="container py-4">
+    <h2 class="pb-2 border-bottom">Edit Friend</h2>
+
+    <!-- Edit Friend Form -->
+    <form asp-action="EditFriend" asp-controller="Friends" method="post" class="needs-validation" novalidate>
+        <!-- Server side validation errors, rough but just in case client side validation is not working or tampered with -->
+        @if (Model.ValidationResult.HasErrors)
+        {
+            <div class="row g-3">
+                @foreach (var item in Model.ValidationResult.ErrorMsgs)
+                {
+                    <span class="alert alert-danger" role="alert">
+                        @item
+                    </span>
+                }
+            </div>
+        }
+
+        <input asp-for="FriendIM.FriendId" type="hidden" />
+        <input asp-for="FriendIM.StatusIM" type="hidden" />
+
+        <div class="mb-3">
+            <label asp-for="FriendIM.FirstName" class="form-label">First Name</label>
+            <input asp-for="FriendIM.FirstName" class="form-control" />
+            <span asp-validation-for="FriendIM.FirstName" class="invalid-feedback"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="FriendIM.LastName" class="form-label">Last Name</label>
+            <input asp-for="FriendIM.LastName" class="form-control" />
+            <span asp-validation-for="FriendIM.LastName" class="invalid-feedback"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="FriendIM.Birthday" class="form-label">Birthday</label>
+            <input asp-for="FriendIM.Birthday" class="form-control" />
+            <span asp-validation-for="FriendIM.Birthday" class="invalid-feedback"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="FriendIM.Email" class="form-label">Email</label>
+            <input asp-for="FriendIM.Email" class="form-control" />
+            <span asp-validation-for="FriendIM.Email" class="invalid-feedback"></span>
+        </div>
+
+        @if (Model.FriendIM.Address != null)
+        {
+            <input asp-for="FriendIM.Address.AddressId" type="hidden" />
+            <input asp-for="FriendIM.Address.StatusIM" type="hidden" />
+            <div class="mb-3">
+                <label asp-for="FriendIM.Address.StreetAddress" class="form-label">Street Address</label>
+                <input asp-for="FriendIM.Address.StreetAddress" class="form-control" />
+                <span asp-validation-for="FriendIM.Address.StreetAddress" class="invalid-feedback"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="FriendIM.Address.ZipCode" class="form-label">Zip Code</label>
+                <input asp-for="FriendIM.Address.ZipCode" class="form-control" />
+                <span asp-validation-for="FriendIM.Address.ZipCode" class="invalid-feedback"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="FriendIM.Address.Country" class="form-label">Country</label>
+                <input asp-for="FriendIM.Address.Country" class="form-control" />
+                <span asp-validation-for="FriendIM.Address.Country" class="invalid-feedback"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="FriendIM.Address.City" class="form-label">City</label>
+                <input asp-for="FriendIM.Address.City" class="form-control" />
+                <span asp-validation-for="FriendIM.Address.City" class="invalid-feedback"></span>
+            </div>
+        }
+        <button type="submit" class="btn btn-primary">
+            Save Changes
+            <svg class="mb-1" width="1.1em" height="1.1em" fill="white"><use xlink:href="#save" /></svg>
+        </button>
+
+    </form>
+
+    <!-- Add Pet/Quote Buttons -->
+    <div class="container p-0">
+        <h2 class="pb-2 border-bottom">Add Pets/Quotes to @Model.FriendIM.FirstName @Model.FriendIM.LastName</h2>
+
+        <div class="row mb-3">
+            <div class="col-12 col-sm-7 col-md-5">
+                <button id="toggleQuoteButton" type="button" class="btn btn-success w-100 py-2">Add Quote to Friend</button>
+            </div>
+        </div>
+        <form id="addQuoteForm" method="post" asp-controller="Friends" asp-action="AddQuote" class="mb-4" style="display:none;">
+            <input type="hidden" asp-for="FriendIM.FriendId" />
+            <input type="hidden" asp-for="QuoteIM.QuoteId" />
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label asp-for="QuoteIM.Author" class="form-label">Author:</label>
+                    <input asp-for="QuoteIM.Author" class="form-control" />
+                </div>
+
+                <div class="col-md-8 mb-3">
+                    <label asp-for="QuoteIM.Quote" class="form-label">Quote:</label>
+                    <textarea asp-for="QuoteIM.Quote" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">+ Add Quote</button>
+        </form>
+
+        <div class="row mb-3">
+            <div class="col-12 col-sm-7 col-md-5">
+                <button id="togglePetButton" type="button" class="btn btn-success w-100 py-2">Add Pet to Friend</button>
+            </div>
+        </div>
+        <form id="addPetForm" method="post" asp-controller="Friends" asp-action="AddPet" class="mb-4" style="display:none;">
+            <input type="hidden" asp-for="FriendIM.FriendId" />
+            <input type="hidden" asp-for="PetIM.PetId" />
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label asp-for="PetIM.Name" class="form-label">Name:</label>
+                    <input asp-for="PetIM.Name" class="form-control" />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label asp-for="PetIM.Kind" class="form-label">Kind:</label>
+                    @Html.DropDownListFor(model => model.PetIM.Kind, new SelectList(Enum.GetValues(typeof(enAnimalKind))), new { @class = "form-select" })
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label asp-for="PetIM.Mood" class="form-label">Mood:</label>
+                    @Html.DropDownListFor(model => model.PetIM.Mood, new SelectList(Enum.GetValues(typeof(enAnimalMood))), new { @class = "form-select" })
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">+ Add Pet</button>
+        </form>
+    </div>
+
+    <!-- Pet Forms -->
+    @if (Model.FriendIM.Pets != null && Model.FriendIM.Pets.Any())
+    {
+        <h2 class="pb-2 border-bottom">Edit Pets</h2>
+        for (int i = 0; i < Model.FriendIM.Pets.Count; i++)
+        {
+            <form method="post" asp-action="EditPet" asp-controller="Friends" class="mb-4" novalidate>
+                <input type="hidden" asp-for="FriendIM.FriendId" />
+                <input type="hidden" name="petId" value="@Model.FriendIM.Pets[i].PetId" />
+                <input type="hidden" name="vwm.PetIM.PetId" value="@Model.FriendIM.Pets[i].PetId" />
+
+                <input type="hidden" name="friendId" value="@Model.FriendIM.FriendId" />
+
+                <div class="row">
+                    <div class="col-md-2 mb-3">
+                        <label asp-for="PetIM.Name" class="form-label">Name:</label>
+                        <input asp-for="PetIM.Name" name="vwm.PetIM.Name" value="@Model.FriendIM.Pets[i].Name" class="form-control" />
+                        <span asp-validation-for="PetIM.Name" class="invalid-feedback"></span>
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        <label for="petKind-@i" class="form-label">Kind</label>
+                        @Html.DropDownList($"vwm.PetIM.Kind", new SelectList(Enum.GetValues(typeof(enAnimalKind))), Model.FriendIM.Pets[i].Kind.ToString(), new { id = $"petKind-{i}", @class = "form-select" })
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        <label for="petMood-@i" class="form-label">Mood</label>
+                        @Html.DropDownList($"vwm.PetIM.Mood", new SelectList(Enum.GetValues(typeof(enAnimalMood))), Model.FriendIM.Pets[i].Mood.ToString(), new { id = $"petMood-{i}", @class = "form-select" })
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary me-2">
+                    Save Pet
+                    <svg class="mb-1" width="1.1em" height="1.1em" fill="white"><use xlink:href="#save" /></svg>
+                </button>
+                <button formmethod="post" formaction="@Url.Action("DeletePet", "Friends", new { friendId = Model.FriendIM.FriendId, petId = Model.FriendIM.Pets[i].PetId })" class="btn btn-danger">Delete Pet</button>
+            </form>
+        }
+    }
+
+    <!-- Quote Forms -->
+    @if (Model.FriendIM.Quotes != null && Model.FriendIM.Quotes.Any())
+    {
+        <h2 class="pb-2 border-bottom">Edit Quotes</h2>
+        for (int i = 0; i < Model.FriendIM.Quotes.Count; i++)
+        {
+            <form method="post" asp-action="EditQuote" asp-controller="Friends" class="mb-4" novalidate>
+                <input type="hidden" asp-for="FriendIM.FriendId" />
+                <input type="hidden" name="quoteId" value="@Model.FriendIM.Quotes[i].QuoteId" />
+
+                <input type="hidden" name="friendId" value="@Model.FriendIM.FriendId" />
+
+                <!-- Update fields to use the vwmAddEditFriend model structure -->
+                <div class="row">
+                    <div class="col-md-2 mb-3">
+                        <label for="vwm_QuoteIM_Author_@i" class="form-label">Author:</label>
+                        <input type="text" id="vwm_QuoteIM_Author_@i" name="vwm.QuoteIM.Author" value="@Model.FriendIM.Quotes[i].Author" class="form-control" />
+                        <span asp-validation-for="FriendIM.Quotes[i].Author" class="invalid-feedback"></span>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <label for="vwm_QuoteIM_Quote_@i" class="form-label">Quote:</label>
+                        <textarea id="vwm_QuoteIM_Quote_@i" name="vwm.QuoteIM.Quote" class="form-control" rows="3">@Model.FriendIM.Quotes[i].Quote</textarea>
+                        <span asp-validation-for="FriendIM.Quotes[i].Quote" class="invalid-feedback"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary me-2">
+                    Save Quote
+                    <svg class="mb-1" width="1.1em" height="1.1em" fill="white"><use xlink:href="#save" /></svg>
+                </button>
+                <button formmethod="post" formaction="@Url.Action("DeleteQuote", "Friends", new { friendId = Model.FriendIM.FriendId, quoteId = Model.FriendIM.Quotes[i].QuoteId })" class="btn btn-danger">Delete Quote</button>
+            </form>
+        }
+    }
+</div>
+
+@section script
+{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/script/seido/collapse-event-handling.js"></script>
+}

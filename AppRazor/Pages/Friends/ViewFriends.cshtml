@@ -1,0 +1,55 @@
+﻿@page
+@model AppRazor.Pages.Friends.ViewFriendsModel
+@{
+    ViewData["Title"] = "List of Friends";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">List of Friends</h2>
+
+    <p class="text-center mb-4">The database now contains @Model.NrOfFriends friends.</p>
+
+    <div class="text-center mb-4">
+        <form method="post" class="d-inline-block">
+            <input asp-for="FriendId" type="hidden" />
+            <button type="submit" class="btn btn-success" asp-page-handler="NewFriend">+ Add New Friend</button>
+        </form>
+    </div>
+
+    @if (Model.Friends != null && Model.Friends.Count > 0)
+    {
+        <div class="row">
+            @foreach (var friend in Model.Friends)
+            {
+                <div class="col-md-4 col-lg-3 mb-3">
+                    <div class="card h-100 text-center">
+                        <div class="card-body d-flex flex-column justify-content-center themed-grid-col">
+                            <h5 class="card-title">@friend.FirstName @friend.LastName</h5>
+                            <p class="card-text">
+                                @if (friend.Address != null)
+                                {
+                                    <span class="badge bg-success">Has Address</span>
+                                }
+                                else
+                                {
+                                    <span class="badge text-muted text-dark">No Address</span>
+                                }
+                            </p>
+                        </div>
+                        <div class="card-footer d-flex flex-row justify-content-center">
+                            <a asp-page="./EditAddToFriend" asp-route-id="@friend.FriendId" class="btn btn-primary me-2">Edit</a>
+                            <form method="post" class="me-2">
+                                <button type="submit" asp-page-handler="Delete" asp-route-friendId="@friend.FriendId" class="btn btn-danger">Delete</button>
+                            </form>
+                            <a asp-page="./ViewEditFriend" asp-route-id="@friend.FriendId" class="btn btn-secondary">View</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">No friends found.</div>
+    }
+</div>

@@ -1,0 +1,35 @@
+﻿@model vwmListFriends
+@{
+    ViewData["Title"] = "Friends List";
+}
+
+<div class="container px-4 py-4" id="list-of-quotes">
+    <h2 class="pb-2 border-bottom">List of friends in cities and countries</h2>
+    <div class="alert alert-info" role="alert">
+        Click any of the friends below to edit them!
+    </div>
+    @if (Model.GroupedFriends != null && Model.GroupedFriends.Count > 0)
+    {
+        @foreach (var group in Model.GroupedFriends)
+        {
+            <div class="row mb-3">
+                <div class="col-md-12 themed-grid-col">
+                    <h3>@group.Key</h3>
+                    <div class="list-group">
+                        @foreach (var friend in group.Value)
+                        {
+                            <a asp-action="AddEditFriend" asp-controller="Friends" asp-route-id="@friend.FriendId" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                <span>@friend.FirstName @friend.LastName</span>
+                                <small class="text-muted">City: @(friend.Address?.City ?? "Unknown")</small>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p class="text-center">No friends found</p>
+    }
+</div>

@@ -1,0 +1,37 @@
+﻿@model vwmSeed
+@{
+    ViewData["Title"] = "Seed Data";
+}
+@attribute [IgnoreAntiforgeryToken]
+
+<div class="container px-4 py-4" id="seed">
+    <h2 class="pb-2 border-bottom">Seed Data</h2>
+
+    <p>
+        Currently the database contains @Model.NrOfFriends seeded friends. Reseed according to the number of items you want.
+        You may optionally remove the old data before seeding.
+    </p>
+    <div class="row row-cols-1 row-cols-lg-4 align-items-stretch py-2">
+        <div class="col-md-7 col-lg-8">
+            <form asp-controller="Seed" asp-action="Seed" method="post" novalidate>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label for="nrItems" class="form-label">Number of items</label>
+                        <input asp-for="NrOfItems" type="number" class="form-control" id="nrItems" placeholder="" value="@Model.NrOfItems" />
+                        <span asp-validation-for="NrOfItems" class="invalid-feedback"></span>
+
+                        <label class="form-check-label" for="removeSeeds"></label>
+                        <input asp-for="RemoveSeeds" class="form-check-input" type="checkbox" id="removeSeeds">
+                        Clear before seeding
+                    </div>
+                </div>
+                <button class="w-50 btn btn-primary btn-lg my-4" type="submit" asp-controller="Seed" asp-action="Seed">Seed</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section script
+{
+    <partial name="_ValidationScriptsPartial" />
+}
